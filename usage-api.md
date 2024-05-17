@@ -31,89 +31,100 @@ If you want the token to have access to only specific permissions, you can check
 
 ## Upload File Example
 
-In the following example, we will learn how to integrate the Cloudify API to upload files using Laravel.
+In the following example, we will learn how to integrate the Cloudify API to upload files using PHP or Node.js.
 
-### Step 1: Create the Upload Form
+First, create a view file to display a form that allows users to select a file to upload:
 
-First, create a view file to display a form that allows users to select a file to upload. Save this file as `resources/views/upload.blade.php`:
-
-```blade
-@error('file')
-    <p style="color: red">{{ $message }}</p>
-@enderror
-
-@if(session('success'))
-    <p style="color: green">URL: <code>{{ session('success') }}</code></p>
-@endif
-
-<form action="{{ route('upload') }}" method="post" enctype="multipart/form-data">
-    @csrf
-
+```html
+<form action="/" method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <button type="submit">Upload</button>
 </form>
 ```
 
-### Step 2: Create the Controller
+::: code-group
 
-Next, create an `UploadController` to render the view and handle the logic to send the file to the API. Save this file as `app/Http/Controllers/UploadController.php`:
+```php [PHP]
+$token = 'Paste_your_API_token_here';
 
-```php
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
-
-class UploadController extends Controller
-{
-    public function index(): View
-    {
-        return view('upload');
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $curl = curl_init();
     
-    public function store(Request $request): RedirectResponse
-    {
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://cloudify.botble.com/api/v1/media/files',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array('file'=> new \CURLFile($request->file('file'))),
-            CURLOPT_HTTPHEADER => array(
-                'Accept: application/json',
-                'Token: {token}', // Replace {token} with your actual API token
-            ),
-        ));
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        $data = json_decode($response, true);
-        $fileDetail = Arr::get($data, 'data');
-
-        if (! $fileDetail) {
-            return back()->withErrors(['file' => $data['message']]);
-        }
-
-        return back()->with('success', $fileDetail['full_url']);
-    }
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://cloudify.botble.com/api/v1/media/files',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS => array('file'=> new \CURLFile($_FILES['file']['tmp_name'])),
+        CURLOPT_HTTPHEADER => array(
+            'Accept: application/json',
+            "'Token: $token",
+        ),
+    ));
+    
+    $response = curl_exec($curl);
+    curl_close($curl);
+    
+    echo $response;
 }
 ```
 
-### Step 3: Define the Routes
+```js [Node.js]
+const express = require('express')
+const multer = require('multer')
+const fs = require('fs')
+const request = require('request')
+const path = require('path')
 
-Finally, define the routes to access the upload form and handle the file upload. Add the following to `routes/web.php`:
+const app = express()
+const upload = multer({ dest: 'uploads/' })
 
-```php
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UploadController;
+app.use(express.static('public'))
 
-Route::get('upload', [UploadController::class, 'index'])->name('upload');
-Route::post('upload', [UploadController::class, 'store']);
+app.post('/upload', upload.single('file'), (req, res) => {
+    const filePath = path.join(__dirname, req.file.path)
+    const fileStream = fs.createReadStream(filePath)
+
+    const options = {
+        method: 'POST',
+        url: 'https://cloudify.botble.com/api/v1/media/files',
+        headers: {
+            Accept: 'application/json',
+            Token: '{token}',
+        },
+        formData: {
+            file: {
+                value: fileStream,
+                options: {
+                    filename: req.file.originalname,
+                    contentType: req.file.mimetype,
+                },
+            },
+        },
+    }
+
+    request(options, function (error, response) {
+        // Delete the file from local uploads directory after upload
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error('Failed to delete file:', err)
+            }
+        })
+
+        if (error) {
+            throw new Error(error)
+        }
+
+        console.log(response.body)
+        res.send(response.body)
+    })
+})
+
+app.listen(3000, () => {
+    console.log('Server started on http://localhost:3000')
+})
 ```
