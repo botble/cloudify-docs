@@ -18,6 +18,13 @@ export default [
             { text: 'Media', link: '/cloudify/media' },
         ],
     },
-    { text: 'API Integration', link: '/cloudify/api' },
+    {
+        text: 'Usage',
+        items: [
+            { text: 'Multi Language', link: '/cloudify/usage-multi-language' },
+            { text: 'Translation', link: '/cloudify/usage-translation' },
+            { text: 'API Integration', link: '/cloudify/usage-api' },
+        ],
+    },
     { text: 'Frequent Questions', link: '/cloudify/faq' },
 ] satisfies DefaultTheme.SidebarItem[];
