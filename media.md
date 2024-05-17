@@ -82,10 +82,10 @@ jpg,jpeg,png,gif,txt,docx,zip,mp3,bmp,csv,xls,xlsx,ppt,pptx,pdf,mp4,doc,mpga,wav
 ```
 
 If you want to add or remove any file extensions, you can override this configuration by
-adding `RV_MEDIA_ALLOWED_MIME_TYPES` to the `.env` file:
+adding `CLOUDIFY_MEDIA_ALLOWED_EXTENSIONS` to the `.env` file:
 
 ```bash
-RV_MEDIA_ALLOWED_MIME_TYPES=jpg,jpeg,png,gif,txt,docx,zip,mp3,bmp,csv,xls,xlsx,ppt,pptx,pdf,mp4,doc,mpga,wav,webp
+CLOUDIFY_MEDIA_ALLOWED_EXTENSIONS=jpg,jpeg,png,gif,txt,docx,zip,mp3,bmp,csv,xls,xlsx,ppt,pptx,pdf,mp4,doc,mpga,wav,webp
 ```
 
 ## Increasing Maximum Upload Size
