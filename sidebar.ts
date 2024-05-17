@@ -1,6 +1,7 @@
 import {DefaultTheme} from 'vitepress';
 
 export default [
+    { text: 'Overview', link: '/cloudify/' },
     {
         text: 'Getting Started',
         items: [
