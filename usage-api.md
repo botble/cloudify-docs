@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         CURLOPT_POSTFIELDS => array('file'=> new \CURLFile($_FILES['file']['tmp_name'])),
         CURLOPT_HTTPHEADER => array(
             'Accept: application/json',
-            'Token': $token",
+            'X-API-KEY': $token",
         ),
     ));
     
