@@ -18,8 +18,7 @@ Password: `12345678`
 - **File Previews** – Preview multiple file types including audio, video, text, pdf, zip and images right in the browser without the need to download the file.
 - **Amazon S3, DigitalOcean Spaces, Wasabi, BunnyCDN, Cloudflare R2** – Easily store user upload files on many different cloud services and providers.
 - **Documentation** – Cloudify comes with in depth documentation that explains everything from installation to all the features.
-- **Authentication** – Fully featured authentication system with social login (facebook, Twitter and google), normal login, registration, password recovery, account settings and more.
-- **Permissions and Roles** – Use fully featured permission and role system to allow (or disallow) users, subscription plans or guests to perform specific action across the site.
+- **Permissions and Roles** – Use fully featured permission and role system to allow (or disallow) users to perform specific action across the site.
 - **Grid and List views** – Both grid and list views are available and freely switchable by the user, so they can select the one they prefer more.
 - **Appearance Editor** – Easily manage your site appearance (colors, logo, font etc.) from appearance editor.
 - **Settings** – an Admin panel has many settings that allow you to fine-tune the site to your needs.
