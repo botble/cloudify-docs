@@ -36,7 +36,7 @@ In the following example, we will learn how to integrate the Cloudify API to upl
 First, create a view file to display a form that allows users to select a file to upload:
 
 ```html
-<form action="/" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data">
     <input type="file" name="file" />
     <button type="submit">Upload</button>
 </form>
