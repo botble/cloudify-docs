@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         CURLOPT_POSTFIELDS => array('file'=> new \CURLFile($_FILES['file']['tmp_name'])),
         CURLOPT_HTTPHEADER => array(
             'Accept: application/json',
-            'X-API-KEY': $token",
+            'X-API-KEY: ' . $token,
         ),
     ));
     
@@ -94,7 +94,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
         url: 'https://cloudify.botble.com/api/v1/media/files',
         headers: {
             Accept: 'application/json',
-            Token: '{token}',
+            X-API-KEY: '{token}',
         },
         formData: {
             file: {
