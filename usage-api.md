@@ -50,8 +50,11 @@ $token = 'Paste_your_API_token_here';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $curl = curl_init();
     
+    $file = new \CURLFile($_FILES['file']['tmp_name']);
+    $file->setPostFilename($_FILES['file']['name']);
+
     curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://cloudify.botble.com/api/v1/media/files',
+        CURLOPT_URL => 'http://cloudify.test/api/v1/media/files',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -59,16 +62,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => array('file'=> new \CURLFile($_FILES['file']['tmp_name'])),
+        CURLOPT_POSTFIELDS => array('file'=> $file),
         CURLOPT_HTTPHEADER => array(
             'Accept: application/json',
             'X-API-KEY: ' . $token,
         ),
     ));
-    
+
     $response = curl_exec($curl);
     curl_close($curl);
-    
+
     echo '<pre>';
     print_r(json_decode($response, true));
     echo '</pre>';
